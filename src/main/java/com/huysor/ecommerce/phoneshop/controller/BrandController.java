@@ -6,13 +6,10 @@ import com.huysor.ecommerce.phoneshop.services.BrandService;
 import com.huysor.ecommerce.phoneshop.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/brand")
+@RequestMapping("brand")
 public class BrandController {
     @Autowired
     private BrandService brandService;
@@ -20,9 +17,16 @@ public class BrandController {
     // post method
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO){
+        System.out.println(brandDTO);
         Brands brands= Mapper.toBrand(brandDTO);
         brands = brandService.create(brands);
-        return ResponseEntity.ok(null) ;
+        // to respon all data from brands
+//        return ResponseEntity.ok(brands) ;
+
+        // to respon body with id
+        return ResponseEntity.ok(Mapper.toBrandDTO(brands)) ;
     }
+
+
 
 }
