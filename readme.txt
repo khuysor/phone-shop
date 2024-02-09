@@ -4,3 +4,8 @@ service : business layout
 controller :api endpoint
 
 DTO mean data transfer object
+
+http status :
+    200 it ok
+    404 not found
+    500 internal error
