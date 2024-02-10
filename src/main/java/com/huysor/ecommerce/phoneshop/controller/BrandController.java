@@ -1,13 +1,19 @@
 package com.huysor.ecommerce.phoneshop.controller;
 
-import com.huysor.ecommerce.phoneshop.dto.BrandDTO;
-import com.huysor.ecommerce.phoneshop.entity.Brands;
-import com.huysor.ecommerce.phoneshop.entity.Model;
-import com.huysor.ecommerce.phoneshop.services.BrandService;
-import com.huysor.ecommerce.phoneshop.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.huysor.ecommerce.phoneshop.dto.BrandDTO;
+import com.huysor.ecommerce.phoneshop.entity.Brands;
+import com.huysor.ecommerce.phoneshop.services.BrandService;
+import com.huysor.ecommerce.phoneshop.util.Mapper;
 
 @RestController
 @RequestMapping("brand")

@@ -1,19 +1,11 @@
 package com.huysor.ecommerce.phoneshop.servicesImplement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.huysor.ecommerce.phoneshop.entity.Brands;
-import com.huysor.ecommerce.phoneshop.exception.ApiException;
-import com.huysor.ecommerce.phoneshop.exception.GlobalExceptionHandler;
 import com.huysor.ecommerce.phoneshop.exception.ResourceNotFoundException;
 import com.huysor.ecommerce.phoneshop.repository.BrandRepository;
 import com.huysor.ecommerce.phoneshop.services.BrandService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BrandImplement implements BrandService {

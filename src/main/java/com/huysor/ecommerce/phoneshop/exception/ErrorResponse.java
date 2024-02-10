@@ -1,8 +1,9 @@
 package com.huysor.ecommerce.phoneshop.exception;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 @Data
 @AllArgsConstructor
 public class ErrorResponse {

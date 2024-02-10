@@ -1,9 +1,8 @@
 package com.huysor.ecommerce.phoneshop.services;
 
-import com.huysor.ecommerce.phoneshop.entity.Brands;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.huysor.ecommerce.phoneshop.entity.Brands;
 
 @Service
 public interface BrandService {

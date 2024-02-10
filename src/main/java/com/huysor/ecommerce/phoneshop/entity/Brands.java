@@ -1,9 +1,11 @@
 package com.huysor.ecommerce.phoneshop.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.Generated;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
 @Data
 @Entity
@@ -15,4 +17,5 @@ public class Brands {
     private Integer id;
     @Column(name = "brand_name")
     private String name;
+
 }
