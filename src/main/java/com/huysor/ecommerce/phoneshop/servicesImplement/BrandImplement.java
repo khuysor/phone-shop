@@ -1,4 +1,5 @@
 package com.huysor.ecommerce.phoneshop.servicesImplement;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +10,16 @@ import com.huysor.ecommerce.phoneshop.services.BrandService;
 
 @Service
 public class BrandImplement implements BrandService {
-    @Autowired
-   protected BrandRepository brandRepository;
-    @Override
-    public Brands create(Brands brands) {
-        return brandRepository.save(brands);
-    }
+	@Autowired
+	protected BrandRepository brandRepository;
 
-    @Override
-    public Brands getBrandById(Integer id) {
+	@Override
+	public Brands create(Brands brands) {
+		return brandRepository.save(brands);
+	}
+
+	@Override
+	public Brands getBrandById(Integer id) {
 //        basic concept
 //       Optional <Brands> optionalBrands= brandRepository.findById(id);
 //       if(optionalBrands.isPresent()){
@@ -29,13 +31,13 @@ public class BrandImplement implements BrandService {
 //        return brandRepository.findById(id).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND,String.format("Brand with id %d not found",id)));
 
 //        oop concept
-        return brandRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("brand",id));
-    }
+		return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("brand", id));
+	}
 
-    @Override
-    public Brands update(Integer id,Brands brandsUpdate) {
-       Brands brands=getBrandById(id);
-       brands.setName(brandsUpdate.getName());
-       return brandRepository.save(brands);
-    }
+	@Override
+	public Brands update(Integer id, Brands brandsUpdate) {
+		Brands brands = getBrandById(id);
+		brands.setName(brandsUpdate.getName());
+		return brandRepository.save(brands);
+	}
 }

@@ -22,7 +22,7 @@ public class BrandController {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
 		Brands brands = BrandMapper.INSTANCE.toBrand(brandDTO);
-		brands=brandService.create(brands);
+		brands = brandService.create(brands);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brands));
 	}
 
@@ -38,10 +38,11 @@ public class BrandController {
 		Brands updated = brandService.update(brand_id, brands);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updated));
 	}
-	@RequestMapping
-	public ResponseEntity<?>getBrands(@RequestParam Map<String,String>params){
 
-	return  null;
+	@RequestMapping
+	public ResponseEntity<?> getBrands(@RequestParam Map<String, String> params) {
+
+		return null;
 	}
 
 }

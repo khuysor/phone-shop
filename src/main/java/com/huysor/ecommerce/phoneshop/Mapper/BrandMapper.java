@@ -8,9 +8,9 @@ import com.huysor.ecommerce.phoneshop.entity.Brands;
 
 @Mapper
 public interface BrandMapper {
-	BrandMapper INSTANCE= Mappers.getMapper(BrandMapper.class);
+	BrandMapper INSTANCE = Mappers.getMapper(BrandMapper.class);
 
-    Brands toBrand(BrandDTO dto);
+	Brands toBrand(BrandDTO dto);
 
-    BrandDTO toBrandDTO(Brands entity);
+	BrandDTO toBrandDTO(Brands entity);
 }
