@@ -38,10 +38,10 @@ public class BrandController {
 		Brands updated = brandService.update(brand_id, brands);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updated));
 	}
-//	@RequestMapping
-//	public ResponseEntity<?>getBrands(@RequestParam Map<String,String>params){
-//
-//
-//	}
+	@RequestMapping
+	public ResponseEntity<?>getBrands(@RequestParam Map<String,String>params){
+
+	return  null;
+	}
 
 }
