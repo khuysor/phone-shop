@@ -1,5 +1,7 @@
 package com.huysor.ecommerce.phoneshop.servicesImplement;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,4 +42,18 @@ public class BrandImplement implements BrandService {
 		brands.setName(brandsUpdate.getName());
 		return brandRepository.save(brands);
 	}
+	@Override
+	public List<Brands> getBrands() {
+		return brandRepository.findAll();
+
+		}
+	@Override
+	public List<Brands> getBrands(String name) {
+//		return brandRepository.findByNameIgnoreCase(name);
+//		return brandRepository.findByNameLike(name);
+		return brandRepository.findByNameContainingIgnoreCase(name);
+
+		}
+
+
 }
