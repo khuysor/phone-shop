@@ -1,6 +1,7 @@
 package com.huysor.ecommerce.phoneshop.servicesImplement;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,11 +10,14 @@ import com.huysor.ecommerce.phoneshop.entity.Brands;
 import com.huysor.ecommerce.phoneshop.exception.ResourceNotFoundException;
 import com.huysor.ecommerce.phoneshop.repository.BrandRepository;
 import com.huysor.ecommerce.phoneshop.services.BrandService;
+import com.huysor.ecommerce.phoneshop.spec.BrandSpec;
+import com.huysor.ecommerce.phoneshop.spec.BrandFilter;
 
 @Service
 public class BrandImplement implements BrandService {
 	@Autowired
 	protected BrandRepository brandRepository;
+
 
 	@Override
 	public Brands create(Brands brands) {
@@ -41,19 +45,26 @@ public class BrandImplement implements BrandService {
 		Brands brands = getBrandById(id);
 		brands.setName(brandsUpdate.getName());
 		return brandRepository.save(brands);
+	} 
+
+	@Override
+	public List<Brands> getBrands(Map<String, String> params) {
+		BrandFilter brandFilter =new BrandFilter();
+		if (params.containsKey("name")) {
+		String name = params.get("name");
+		brandFilter.setName(name);
+		}
+		if(params.containsKey("id")) {
+		Integer id= Integer.parseInt(params.get("id"));
+			brandFilter.setId(id);
+		}
+		BrandSpec brandSpec= new BrandSpec(brandFilter);
+		return brandRepository.findAll(brandSpec);
 	}
-	@Override
-	public List<Brands> getBrands() {
-		return brandRepository.findAll();
+	
+	
 
-		}
-	@Override
-	public List<Brands> getBrands(String name) {
-//		return brandRepository.findByNameIgnoreCase(name);
-//		return brandRepository.findByNameLike(name);
-		return brandRepository.findByNameContainingIgnoreCase(name);
 
-		}
 
 
 }

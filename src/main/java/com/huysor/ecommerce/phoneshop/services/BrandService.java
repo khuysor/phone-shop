@@ -1,6 +1,7 @@
 package com.huysor.ecommerce.phoneshop.services;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,5 @@ public interface BrandService {
 
 	Brands update(Integer id, Brands brands);
 
-	List<Brands> getBrands();
-	List <Brands>getBrands(String name);
+	List<Brands> getBrands(Map<String, String> params);
 }

@@ -26,11 +26,10 @@ public class BrandController {
 	@Autowired
 	private BrandService brandService;
 
-	// post method
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
 		Brands brands = BrandMapper.INSTANCE.toBrand(brandDTO);
-		brands=brandService.create(brands);
+		brands = brandService.create(brands);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brands));
 	}
 
@@ -46,24 +45,16 @@ public class BrandController {
 		Brands updated = brandService.update(brand_id, brands);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updated));
 	}
-	@RequestMapping
-	public ResponseEntity<?>getBrands(@RequestParam Map<String,String>params){
 
-		List<BrandDTO>list=brandService.getBrands().stream().map(brand->BrandMapper.INSTANCE.toBrandDTO(brand)).collect(Collectors.toList());
-
-		return ResponseEntity.ok(list);
-//		this return   all brands
-//		return ResponseEntity.ok(brandService.getBrands());
-	}
-
-	@GetMapping(value = "filter")
-	public ResponseEntity<?>getbrands(@RequestParam("name")String name){
-		List<BrandDTO>list=brandService.getBrands(name)
+	@GetMapping
+	public ResponseEntity<?> getbrands(@RequestParam Map<String, String> params) {
+		List<BrandDTO> list =
+				brandService.getBrands(params)
 				.stream()
-				.map(brands->BrandMapper.INSTANCE.toBrandDTO(brands))
+				.map(brands -> BrandMapper.INSTANCE.toBrandDTO(brands))
 				.collect(Collectors.toList());
 
-		return ResponseEntity.ok( list);
+		return ResponseEntity.ok(list);
 	}
 
 }
