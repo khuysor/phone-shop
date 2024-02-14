@@ -3,7 +3,11 @@ package com.huysor.ecommerce.phoneshop.servicesImplement;
 import java.util.List;
 import java.util.Map;
 
+import com.huysor.ecommerce.phoneshop.services.util.PageUntil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.huysor.ecommerce.phoneshop.entity.Brands;
@@ -48,7 +52,7 @@ public class BrandImplement implements BrandService {
 	} 
 
 	@Override
-	public List<Brands> getBrands(Map<String, String> params) {
+	public Page <Brands> getBrands(Map<String, String> params) {
 		BrandFilter brandFilter =new BrandFilter();
 		if (params.containsKey("name")) {
 		String name = params.get("name");
@@ -59,8 +63,20 @@ public class BrandImplement implements BrandService {
 			brandFilter.setId(id);
 		}
 		BrandSpec brandSpec= new BrandSpec(brandFilter);
-		return brandRepository.findAll(brandSpec);
+		int pageNumber=1;
+		if(params.containsKey(PageUntil.pageNumber)){
+			pageNumber=Integer.parseInt(params.get(PageUntil.pageNumber));
+		}
+		int pageSize=PageUntil.DEFAULT_PAGE_LIMIT;
+		if (params.containsKey(PageUntil.pageSize)){
+			pageSize=Integer.parseInt(params.get(PageUntil.pageSize));
+		}
+
+		Pageable pageable=PageUntil.getPageAble(pageNumber,pageSize);
+		Page<Brands> page = brandRepository.findAll(brandSpec, pageable);
+		return page;
 	}
+
 	
 	
 

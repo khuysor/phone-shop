@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.huysor.ecommerce.phoneshop.dto.PageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,13 +50,9 @@ public class BrandController {
 
 	@GetMapping
 	public ResponseEntity<?> getbrands(@RequestParam Map<String, String> params) {
-		List<BrandDTO> list =
-				brandService.getBrands(params)
-				.stream()
-				.map(brands -> BrandMapper.INSTANCE.toBrandDTO(brands))
-				.collect(Collectors.toList());
-
-		return ResponseEntity.ok(list);
+		Page<Brands> brand=brandService.getBrands(params);
+		PageDTO pageDTO=new PageDTO(brand);
+		return ResponseEntity.ok(pageDTO);
 	}
 
 }

@@ -3,6 +3,7 @@ package com.huysor.ecommerce.phoneshop.services;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.huysor.ecommerce.phoneshop.entity.Brands;
@@ -15,5 +16,5 @@ public interface BrandService {
 
 	Brands update(Integer id, Brands brands);
 
-	List<Brands> getBrands(Map<String, String> params);
+	Page<Brands> getBrands(Map<String, String> params);
 }
