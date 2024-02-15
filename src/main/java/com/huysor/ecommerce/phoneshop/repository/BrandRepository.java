@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.huysor.ecommerce.phoneshop.entity.Brands;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface BrandRepository extends JpaRepository<Brands, Integer>, JpaSpecificationExecutor<Brands> {
 //	 this is find by name but not care about upper case or lower case
 	List<Brands> findByNameIgnoreCase(String name);
