@@ -21,8 +21,17 @@ Testing have twos option :
         - service : it works as business layout
         - repositories : it communicates with data
 
-       - repositories test
+    before we test we need to separate it
+      1.1 - repositories test
           we use h2 database for testing(in memory)
+          we don't test on method that create from library
+          we test only method that we create
+
+      1.2 - service test
+          we use mock test
 
 2. Integration test: it is human testing
+
+
+
 

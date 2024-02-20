@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.huysor.ecommerce.phoneshop.services.util.PageUntil;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +20,10 @@ import com.huysor.ecommerce.phoneshop.spec.BrandSpec;
 import com.huysor.ecommerce.phoneshop.spec.BrandFilter;
 
 @Service
+@RequiredArgsConstructor
 public class BrandImplement implements BrandService {
 	@Autowired
-	protected BrandRepository brandRepository;
+	private final BrandRepository brandRepository;
 
 
 	@Override
@@ -30,17 +33,7 @@ public class BrandImplement implements BrandService {
 
 	@Override
 	public Brands getBrandById(Integer id) {
-//        basic concept
-//       Optional <Brands> optionalBrands= brandRepository.findById(id);
-//       if(optionalBrands.isPresent()){
-//           return optionalBrands.get();
-//       }
-//        throw new HttpClientErrorException(HttpStatus.NOT_FOUND,"Brand with %d Not Found".formatted(id));
 
-//        intermediate concept
-//        return brandRepository.findById(id).orElseThrow(()->new ApiException(HttpStatus.NOT_FOUND,String.format("Brand with id %d not found",id)));
-
-//        oop concept
 		return brandRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("brand", id));
 	}
 
