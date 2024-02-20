@@ -1,17 +1,17 @@
 spring:
   datasource:
-  driverClassName: org.h2.Driver
-  #    url: jdbc:postgresql://localhost:8000/db_phone_shop
-#    username: phone-shop
-#    password: Liisor$22
-  h2:
-    console:
-      enabled: true
+    url: jdbc:postgresql://localhost:8000/db_phone_shop
+    username: phone-shop
+    password: Liisor$22
+#  h2:
+#    console:
+#      enabled: true
 
   #  this the way how to use h2 database
-  url: jdbc:h2:mem:testdb
-  username: sa
-  password:
+#  driverClassName: org.h2.Driver
+#  url: jdbc:h2:mem:testdb
+#  username: sa
+#  password:
   jpa:
     properties:
       hibernate:
