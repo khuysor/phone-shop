@@ -19,5 +19,5 @@ public class Model {
 	private String name;
 	@ManyToOne
 	@JoinColumn(name = "brandId")
-	private Brands brans;
+	private Brands brands;
 }
