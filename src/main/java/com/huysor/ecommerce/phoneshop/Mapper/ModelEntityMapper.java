@@ -1,7 +1,6 @@
 package com.huysor.ecommerce.phoneshop.Mapper;
 
 import com.huysor.ecommerce.phoneshop.dto.ModelDTO;
-import com.huysor.ecommerce.phoneshop.entity.Brands;
 import com.huysor.ecommerce.phoneshop.entity.Model;
 import com.huysor.ecommerce.phoneshop.services.BrandService;
 import org.mapstruct.Mapper;
@@ -10,8 +9,8 @@ import org.mapstruct.factory.Mappers;
 
 
 @Mapper(componentModel = "spring",uses = {BrandService.class})
-public interface ModelMapper {
-    ModelMapper INSTANCE   = Mappers.getMapper(ModelMapper.class);
+public interface ModelEntityMapper {
+    ModelEntityMapper INSTANCE   = Mappers.getMapper(ModelEntityMapper.class);
 
 //    ModelDTO toModelDto(Model model);
     @Mapping(target = "brands",source = "brandId")
