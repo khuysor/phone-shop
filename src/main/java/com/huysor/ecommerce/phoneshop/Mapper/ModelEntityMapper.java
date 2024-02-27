@@ -16,11 +16,11 @@ public interface ModelEntityMapper {
     @Mapping(target = "brands",source = "brandId")
     Model toModel(ModelDTO modelDTO);
 
-    @Mapping(target = "brandId",source = "model.id")
+    @Mapping(target = "brandId",source = "brands.id")
     ModelDTO toModelDTO(Model model);
 //    default Brands toBrandId(Integer id){
 //        Brands brands=new Brands();
 //        brands.setId(id);
-//        return brands;
+//         return brands;
 //    }
 }

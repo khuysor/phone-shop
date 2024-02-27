@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -30,5 +31,10 @@ public class ModelImplement implements ModelService {
     public Page<Model> getAllModel(Map<String, String> params) {
 
         return null;
+    }
+
+    @Override
+    public List<Model> getModelByBrandId(Integer brandId) {
+        return modelRepository.findByBrandsId(brandId);
     }
 }

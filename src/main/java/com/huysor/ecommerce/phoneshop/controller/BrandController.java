@@ -1,6 +1,14 @@
 package com.huysor.ecommerce.phoneshop.controller;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import com.huysor.ecommerce.phoneshop.Mapper.ModelEntityMapper;
+import com.huysor.ecommerce.phoneshop.dto.ModelDTO;
 import com.huysor.ecommerce.phoneshop.dto.PageDTO;
+import com.huysor.ecommerce.phoneshop.entity.Model;
+import com.huysor.ecommerce.phoneshop.services.ModelService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +26,14 @@ import com.huysor.ecommerce.phoneshop.dto.BrandDTO;
 import com.huysor.ecommerce.phoneshop.entity.Brands;
 import com.huysor.ecommerce.phoneshop.services.BrandService;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("brand")
 public class BrandController {
-	@Autowired
-	private BrandService brandService;
+//	@Autowired
+	private final BrandService brandService;
+	private final ModelService modelService;
+	private final ModelEntityMapper modelEntityMapper;
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
@@ -49,6 +60,13 @@ public class BrandController {
 		Page<Brands> brand=brandService.getBrands(params);
 		PageDTO pageDTO=new PageDTO(brand);
 		return ResponseEntity.ok(pageDTO);
+	}
+	@GetMapping("{id}/models")
+	public  ResponseEntity<?>getModelByBrandID(@PathVariable("id")Integer brandId){
+
+		List<Model> brands= modelService.getModelByBrandId(brandId);
+		List<ModelDTO> model=brands.stream().map(modelEntityMapper::toModelDTO).toList();
+		return ResponseEntity.ok(model);
 	}
 
 }
