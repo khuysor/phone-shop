@@ -3,24 +3,16 @@ spring:
     url: jdbc:postgresql://localhost:8000/db_phone_shop
     username: phone-shop
     password: Liisor$22
-#  h2:
-#    console:
-#      enabled: true
-
-  #  this the way how to use h2 database
-#  driverClassName: org.h2.Driver
-#  url: jdbc:h2:mem:testdb
-#  username: sa
-#  password:
   jpa:
     properties:
       hibernate:
-      dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  liquibase:
-    change-log: classpath:db/changelog/liquibase-changeLog.yaml
 
+liquibase:
+  change-log: classpath:db/changelog/liquibase-changeLog.yaml
+  enable: true
