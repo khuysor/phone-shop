@@ -1,0 +1,17 @@
+databaseChangeLog:
+- changeSet:
+    id: 002_insert_brands
+    author: huysor
+    changes:
+    - loadData:
+        tableName: brands
+        columns:
+        - column:
+            name: brand_id
+            type: NUMERIC
+        - column:
+            name: brand_name
+            type: STRING
+        file: db/data/002_brands.csv
+  onError: SKIP
+
