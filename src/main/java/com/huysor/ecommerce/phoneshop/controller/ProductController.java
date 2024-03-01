@@ -17,11 +17,12 @@ public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final ModelService modelService;
-@PostMapping
-    public ResponseEntity<?>create(@RequestBody ProductDTO productDTO){
-        System.out.println("\n"+productDTO+"\n");
-        Product product=productMapper.toProduct(productDTO);
-        product=productService.save(product);
+
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody ProductDTO productDTO) {
+        System.out.println("\n" + productDTO + "\n");
+        Product product = productMapper.toProduct(productDTO);
+        product = productService.save(product);
         return ResponseEntity.ok(product);
     }
 }
