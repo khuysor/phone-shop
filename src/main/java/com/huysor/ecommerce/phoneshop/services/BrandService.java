@@ -12,9 +12,9 @@ import com.huysor.ecommerce.phoneshop.entity.Brands;
 public interface BrandService {
 	Brands create(Brands brands);
 
-	Brands getBrandById(Integer id);
+	Brands getBrandById(Long id);
 
-	Brands update(Integer id, Brands brands);
+	Brands update(Long id, Brands brands);
 
 	Page<Brands> getBrands(Map<String, String> params);
 }

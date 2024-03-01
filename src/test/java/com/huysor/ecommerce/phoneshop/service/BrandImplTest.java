@@ -61,10 +61,10 @@ public class BrandImplTest {
 //        given
             Brands brands =new Brands();
             brands.setName("apple");
-            brands.setId(1);
+            brands.setId(1l);
 //        when
-            when(brandRepository.findById(1)).thenReturn(Optional.of(brands));
-          Brands brandsReturn=  brandService.getBrandById(1);
+            when(brandRepository.findById(1l)).thenReturn(Optional.of(brands));
+          Brands brandsReturn=  brandService.getBrandById(1l);
 //        then
         assertEquals(1,brandsReturn.getId());
         assertEquals("apple",brandsReturn.getName());
@@ -72,8 +72,8 @@ public class BrandImplTest {
     @Test
     void testFindIdError(){
 //        when
-       when(brandRepository.findById(2)).thenReturn(Optional.empty());
-       assertThatThrownBy(()->brandService.getBrandById(2))
+       when(brandRepository.findById(2l)).thenReturn(Optional.empty());
+       assertThatThrownBy(()->brandService.getBrandById(2l))
                .isInstanceOf(ResourceNotFoundException.class)
                .hasMessage("brand with id = 2 not found");
     }

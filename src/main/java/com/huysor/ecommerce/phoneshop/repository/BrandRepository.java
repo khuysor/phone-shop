@@ -9,7 +9,7 @@ import com.huysor.ecommerce.phoneshop.entity.Brands;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BrandRepository extends JpaRepository<Brands, Integer>, JpaSpecificationExecutor<Brands> {
+public interface BrandRepository extends JpaRepository<Brands, Long>, JpaSpecificationExecutor<Brands> {
 //	 this is find by name but not care about upper case or lower case
 	List<Brands> findByNameIgnoreCase(String name);
 

@@ -24,7 +24,7 @@ public class ModelController  {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?>getOneModel(@PathVariable("id")Integer id){
+    public ResponseEntity<?>getOneModel(@PathVariable("id")Long id){
         Model model= modelService.getModelById(id);
         return ResponseEntity.ok(modelEntityMapper.toModelDTO(model));
     }

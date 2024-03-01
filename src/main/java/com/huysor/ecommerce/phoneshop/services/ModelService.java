@@ -9,8 +9,8 @@ import java.util.Map;
 
 public interface ModelService {
      Model save(Model model);
-     Model getModelById(Integer id);
+     Model getModelById(Long id);
      Page<Model> getAllModel(Map<String,String>params);
 
-     List<Model>getModelByBrandId(Integer brandId);
+     List<Model>getModelByBrandId(Long brandId);
 }
