@@ -11,6 +11,8 @@ import com.huysor.ecommerce.phoneshop.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @RequiredArgsConstructor
 @Service
 public class ProductImplement implements ProductService {
@@ -33,7 +35,6 @@ public class ProductImplement implements ProductService {
     @Override
     public void importProduct(ProductImportDTO productImportDTO) {
         Product product = getProduct(productImportDTO.getProductId());
-        System.out.println(productImportDTO);
         Integer available=0;
         if(product.getAvailableUnit()!=null){
             available = product.getAvailableUnit();
@@ -42,5 +43,12 @@ public class ProductImplement implements ProductService {
         productRepository.save(product);
         ProductImportHistory productImportHistory = productMapper.toProduct(productImportDTO);
         productImportRepository.save(productImportHistory);
+    }
+
+    @Override
+    public void setPrice(Long id, BigDecimal Price) {
+    Product product=  getProduct(id);
+    product.setSalePrice(Price);
+    productRepository.save(product);
     }
 }

@@ -1,6 +1,7 @@
 package com.huysor.ecommerce.phoneshop.controller;
 
 import com.huysor.ecommerce.phoneshop.Mapper.ProductMapper;
+import com.huysor.ecommerce.phoneshop.dto.PriceDTO;
 import com.huysor.ecommerce.phoneshop.dto.ProductDTO;
 import com.huysor.ecommerce.phoneshop.dto.ProductImportDTO;
 import com.huysor.ecommerce.phoneshop.entity.Product;
@@ -36,6 +37,11 @@ public class ProductController {
     public ResponseEntity<?>importProduct(@RequestBody @Valid ProductImportDTO productImportDTO){
 
         productService.importProduct(productImportDTO);
-       return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("{id}/setPrice")
+    public ResponseEntity<?>setPrice(@PathVariable Long id, @RequestBody @Valid PriceDTO priceDTO){
+        productService.setPrice(id,priceDTO.getPrice());
+        return ResponseEntity.ok().build();
     }
 }
