@@ -51,4 +51,9 @@ public class ProductImplement implements ProductService {
     product.setSalePrice(Price);
     productRepository.save(product);
     }
+
+    @Override
+    public void validateStock(Long id, Integer unit) {
+
+    }
 }

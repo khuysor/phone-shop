@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ColorRepository extends JpaRepository<Color,Long>, JpaSpecificationExecutor<Color> {
+public interface ColorRepository extends JpaRepository<Color,Long>{
 }

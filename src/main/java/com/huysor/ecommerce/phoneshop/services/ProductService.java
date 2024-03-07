@@ -10,4 +10,5 @@ public interface ProductService {
     Product save(Product product);
     void importProduct(ProductImportDTO productImportDTO);
     void setPrice(Long id, BigDecimal Price);
+    void validateStock(Long id,Integer unit);
 }
