@@ -13,6 +13,7 @@ import com.huysor.ecommerce.phoneshop.services.ProductService;
 import com.huysor.ecommerce.phoneshop.services.SaleService;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +72,12 @@ public class SaleImplement implements SaleService {
         });
     }
 
+    @Override
+    public List<SaleDTO> getAllsale() {
+        List <Sale>page = saleRepository.findAll();
+        return null;
+    }
+
     private void saveSale(SaleDTO saleDTO) {
         Sale sale = new Sale();
         sale.setSoldDate(saleDTO.getSaleDate());
@@ -84,6 +91,7 @@ public class SaleImplement implements SaleService {
             saleDetail.setPrice(null);
         });
     }
+
 
     public void validate1(SaleDTO saleDTO) {
         //validate product
@@ -115,4 +123,5 @@ public class SaleImplement implements SaleService {
             }
         });
     }
+
 }
