@@ -10,11 +10,11 @@ import com.huysor.ecommerce.phoneshop.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,14 +34,21 @@ public class ProductController {
     }
 
     @PostMapping("import")
-    public ResponseEntity<?>importProduct(@RequestBody @Valid ProductImportDTO productImportDTO){
+    public ResponseEntity<?> importProduct(@RequestBody @Valid ProductImportDTO productImportDTO) {
 
         productService.importProduct(productImportDTO);
         return ResponseEntity.ok().build();
     }
+
     @PutMapping("{id}/setPrice")
-    public ResponseEntity<?>setPrice(@PathVariable Long id, @RequestBody @Valid PriceDTO priceDTO){
-        productService.setPrice(id,priceDTO.getPrice());
+    public ResponseEntity<?> setPrice(@PathVariable Long id, @RequestBody @Valid PriceDTO priceDTO) {
+        productService.setPrice(id, priceDTO.getPrice());
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("uploadProduct")
+    public ResponseEntity<?> writeDatafromExcel(@RequestParam("file") MultipartFile file) {
+        Map<Integer, String> errMap = productService.uploadProduct(file);
+        return ResponseEntity.ok(errMap);
     }
 }
