@@ -16,6 +16,7 @@ public class ProductImportDTO {
     private Long productId;
     @Min(value = 1,message = "Product unit must be at least one")
     private Integer importUnit;
+
     private BigDecimal pricePerUnit;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
