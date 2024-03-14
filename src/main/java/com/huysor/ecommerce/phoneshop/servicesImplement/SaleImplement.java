@@ -6,14 +6,13 @@ import com.huysor.ecommerce.phoneshop.entity.Product;
 import com.huysor.ecommerce.phoneshop.entity.Sale;
 import com.huysor.ecommerce.phoneshop.entity.SaleDetail;
 import com.huysor.ecommerce.phoneshop.exception.ApiException;
+import com.huysor.ecommerce.phoneshop.exception.ResourceNotFoundException;
 import com.huysor.ecommerce.phoneshop.repository.ProductRepository;
 import com.huysor.ecommerce.phoneshop.repository.SaleDetailRepository;
 import com.huysor.ecommerce.phoneshop.repository.SaleRepository;
 import com.huysor.ecommerce.phoneshop.services.ProductService;
 import com.huysor.ecommerce.phoneshop.services.SaleService;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -73,55 +72,33 @@ public class SaleImplement implements SaleService {
     }
 
     @Override
-    public List<SaleDTO> getAllsale() {
-        List <Sale>page = saleRepository.findAll();
-        return null;
+    public List<SaleDetail> getAllsale() {
+        List<SaleDetail>list = saleDetailRepository.findAll();
+        return list;
     }
 
-    private void saveSale(SaleDTO saleDTO) {
-        Sale sale = new Sale();
-        sale.setSoldDate(saleDTO.getSaleDate());
+    @Override
+    public Sale getById(Long saleId) {
+        return saleRepository.findById(saleId).orElseThrow(() -> new ResourceNotFoundException("Sale ", saleId));
+    }
+
+    @Override
+    public void cancelSale(Long saleId) {
+
+        // update sell status
+        Sale sale = getById(saleId);
+        sale.setActive(false);
         saleRepository.save(sale);
 
-
-//        save sale detail
-
-        saleDTO.getProductSoldDTOS().forEach(ps -> {
-            SaleDetail saleDetail = new SaleDetail();
-            saleDetail.setPrice(null);
-        });
-    }
-
-
-    public void validate1(SaleDTO saleDTO) {
-        //validate product
-        List<Long> productId = saleDTO.getProductSoldDTOS().stream()
-                .map(ProductSoldDTO::getProductId).toList();
-
-        productId.forEach(productService::getProduct);
+        // get sale detail for update stock
+        List<SaleDetail> saleDetails = saleDetailRepository.findBySaleId(saleId);
+        List<Long> productId = saleDetails.stream().map(saleDetail -> saleDetail.getProduct().getId()).toList();
         List<Product> products = productRepository.findAllById(productId);
-        Map<Long, Product> productMap = products.stream().collect(Collectors.toMap(Product::getId, Function.identity()));
-
-        // validate stock
-        saleDTO.getProductSoldDTOS().forEach(
-                ps -> {
-                    Product product = productMap.get(ps.getProductId());
-                    if (product.getAvailableUnit() < ps.getQuantity()) {
-                        throw new ApiException(HttpStatus.BAD_REQUEST, "Product[%s] have not enough in stock".formatted(product.getName()));
-                    }
-                }
-        );
-
-    }
-
-    public void validate2(SaleDTO saleDTO) {
-        //validate product
-        saleDTO.getProductSoldDTOS().forEach(ps -> {
-            Product product = productService.getProduct(ps.getProductId());
-            if (product.getAvailableUnit() < ps.getQuantity()) {
-                throw new ApiException(HttpStatus.BAD_REQUEST, "Product[%s] have not enough in stock ".formatted(product.getName()));
-            }
+        Map<Long ,Product>productMap=products.stream().collect(Collectors.toMap(Product::getId,Function.identity()));
+        saleDetails.forEach(saleDetail -> {
+            Product product = productMap.get(saleDetail.getProduct().getId());
+            product.setAvailableUnit(product.getAvailableUnit()+saleDetail.getUnit());
+            productRepository.save(product);
         });
     }
-
 }
