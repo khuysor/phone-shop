@@ -17,8 +17,7 @@ public class SaleDetail {
     @ManyToOne()
     @JoinColumn(name = "sale_id")
     private Sale sale;
-    @Column(name = "sold_date")
-    private LocalDateTime soldDate;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
