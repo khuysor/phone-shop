@@ -1,15 +1,21 @@
 package com.huysor.ecommerce.phoneshop.entity;
 
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
-@Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Table(name = "product_import_history")
 public class ProductImportHistory {
     @Id
@@ -26,5 +32,6 @@ public class ProductImportHistory {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
 
 }

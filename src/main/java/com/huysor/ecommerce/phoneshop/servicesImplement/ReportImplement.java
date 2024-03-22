@@ -10,7 +10,7 @@ import com.huysor.ecommerce.phoneshop.repository.ProductImportRepository;
 import com.huysor.ecommerce.phoneshop.repository.ProductRepository;
 import com.huysor.ecommerce.phoneshop.repository.SaleDetailRepository;
 import com.huysor.ecommerce.phoneshop.repository.SaleRepository;
-import com.huysor.ecommerce.phoneshop.services.ReprotService;
+import com.huysor.ecommerce.phoneshop.services.ReportService;
 import com.huysor.ecommerce.phoneshop.spec.*;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class ReportImplement implements ReprotService {
+public class ReportImplement implements ReportService {
     private final SaleRepository saleRepository;
     private final SaleDetailRepository saleDetailRepository;
     private final ProductRepository productRepository;

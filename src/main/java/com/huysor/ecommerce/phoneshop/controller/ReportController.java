@@ -5,7 +5,7 @@ import com.huysor.ecommerce.phoneshop.dto.ProductDTO;
 import com.huysor.ecommerce.phoneshop.dto.ProductReportDTO;
 import com.huysor.ecommerce.phoneshop.entity.SaleDetail;
 import com.huysor.ecommerce.phoneshop.peojection.ProductSold;
-import com.huysor.ecommerce.phoneshop.services.ReprotService;
+import com.huysor.ecommerce.phoneshop.services.ReportService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("reports")
 public class ReportController {
-    private final ReprotService reprotService;
+    private final ReportService reprotService;
 
     // @GetMapping("{startDate}/{endDate}")
     // public ResponseEntity<?> productSold(@DateTimeFormat(pattern = "yyyy-MM-dd")
