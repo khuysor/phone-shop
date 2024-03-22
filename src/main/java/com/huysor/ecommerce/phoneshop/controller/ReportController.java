@@ -1,5 +1,6 @@
 package com.huysor.ecommerce.phoneshop.controller;
 
+import com.huysor.ecommerce.phoneshop.dto.ExpenseReportDTO;
 import com.huysor.ecommerce.phoneshop.dto.ProductDTO;
 import com.huysor.ecommerce.phoneshop.dto.ProductReportDTO;
 import com.huysor.ecommerce.phoneshop.entity.SaleDetail;
@@ -40,7 +41,14 @@ public class ReportController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("startDate") LocalDate startDate,
             @DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("endDate") LocalDate endDate) {
 
-        List<ProductReportDTO>productReportDTOs=reprotService.getProductReport(startDate,endDate);
+        List<ProductReportDTO> productReportDTOs = reprotService.getProductReport(startDate, endDate);
         return ResponseEntity.ok(productReportDTOs);
     }
+
+    @GetMapping("expense/{startDate}/{endDate}")
+    public ResponseEntity<?> expenseReport(@DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("startDate") LocalDate startDate, @DateTimeFormat(pattern = "yyyy-MM-dd") @PathVariable("endDate") LocalDate endDate) {
+        List<ExpenseReportDTO> list = reprotService.getExpenseReport(startDate, endDate);
+        return ResponseEntity.ok(list);
+    }
 }
+

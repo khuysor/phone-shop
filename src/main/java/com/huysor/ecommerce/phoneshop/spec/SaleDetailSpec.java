@@ -32,7 +32,7 @@ public class SaleDetailSpec implements Specification<SaleDetail> {
          predicates.add(startDate);
         }
         if (Objects.nonNull(saleDetailFilter.getEndDate())) {
-          Predicate endDate=  cb.lessThan(sale.get("soldDate"), saleDetailFilter.getEndDate());
+          Predicate endDate=  cb.lessThanOrEqualTo(sale.get("soldDate"), saleDetailFilter.getEndDate());
           predicates.add(endDate);
         
         }
