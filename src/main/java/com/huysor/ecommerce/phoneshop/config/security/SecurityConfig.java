@@ -3,6 +3,7 @@ package com.huysor.ecommerce.phoneshop.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,31 +26,38 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
+        HttpSecurity httpSecurity = http
+                .csrf().disable()
+                .authorizeHttpRequests()
                 .requestMatchers("/", "index.html").permitAll()
-                .requestMatchers("/brand").hasRole("SALE")
-                .anyRequest().authenticated()
+//                .requestMatchers("/brand").hasRole("SALE") //this satic roles
+//                .requestMatchers(HttpMethod.GET,"/brand").hasAuthority("brand:read")// untype safe
+//                .requestMatchers(HttpMethod.GET, "/brand").hasAuthority(PermissionEnum.BRAND_READ.getDescription())
+                .requestMatchers("/brand").hasRole(RoleEnum.SALE.name()) // allow to access all http method
+                .requestMatchers(HttpMethod.POST, "/brand").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())// type safe
+                .anyRequest()
+                .authenticated()
                 .and()
                 .httpBasic(Customizer.withDefaults());
-        return http.build();
+        return httpSecurity.build();
     }
 
-        @Bean
+    @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("ADMIN")
+        UserDetails userDetails = User
+                .withUsername("user")
+                .password(passwordEncoder.encode("123"))
+//                .roles("ADMIN") // static roles
+                .authorities(RoleEnum.ADMIN.grantedAuthorities()) // collection of granted  authorities
                 .build();
-        UserDetails userDetails1= User
+        UserDetails userDetails1 = User
                 .withUsername("kok")
-                .password(passwordEncoder.encode("1234"))
-                .roles("SALE")
+                .password(passwordEncoder.encode("123"))
+                .authorities(RoleEnum.SALE.grantedAuthorities())
                 .build();
 
-        return new InMemoryUserDetailsManager(userDetails,userDetails1);
+        return new InMemoryUserDetailsManager(userDetails, userDetails1);
     }
-
 
 
 }
