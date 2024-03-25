@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -17,29 +18,29 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Collections;
 
-@EnableWebSecurity
-@Configuration
 
+@Configuration
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        HttpSecurity httpSecurity = http
+                 http
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/", "index.html").permitAll()
 //                .requestMatchers("/brand").hasRole("SALE") //this satic roles
 //                .requestMatchers(HttpMethod.GET,"/brand").hasAuthority("brand:read")// untype safe
 //                .requestMatchers(HttpMethod.GET, "/brand").hasAuthority(PermissionEnum.BRAND_READ.getDescription())
-                .requestMatchers("/brand").hasRole(RoleEnum.SALE.name()) // allow to access all http method
-                .requestMatchers(HttpMethod.POST, "/brand").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())// type safe
+//                .requestMatchers("/brand").hasRole(RoleEnum.SALE.name()) // allow to access all http method
+//                .requestMatchers(HttpMethod.POST, "/brand").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())// type safe
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic(Customizer.withDefaults());
-        return httpSecurity.build();
+                .httpBasic();
+        return http.build();
     }
 
     @Bean

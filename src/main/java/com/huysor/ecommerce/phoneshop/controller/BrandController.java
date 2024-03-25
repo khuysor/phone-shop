@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,12 +31,13 @@ import com.huysor.ecommerce.phoneshop.services.BrandService;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("brand")
+@Secured("ROLE_SALE")// we can use like this
 public class BrandController {
-//	@Autowired
 	private final BrandService brandService;
 	private final ModelService modelService;
 	private final ModelEntityMapper modelEntityMapper;
 
+	@PreAuthorize("hasAuthority('brand:write')") //or like this
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
 		Brands brands = BrandMapper.INSTANCE.toBrand(brandDTO);
@@ -54,6 +57,7 @@ public class BrandController {
 		Brands updated = brandService.update(brand_id, brands);
 		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updated));
 	}
+
 
 	@GetMapping
 	public ResponseEntity<?> getbrands(@RequestParam Map<String, String> params) {
