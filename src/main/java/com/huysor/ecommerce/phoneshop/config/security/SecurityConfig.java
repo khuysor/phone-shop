@@ -1,5 +1,6 @@
 package com.huysor.ecommerce.phoneshop.config.security;
 
+import com.huysor.ecommerce.phoneshop.config.jwt.JwtLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,7 @@ public class SecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                  http
                 .csrf().disable()
+                         .addFilter(new JwtLoginFilter(authentication -> authentication))
                 .authorizeHttpRequests()
                 .requestMatchers("/", "index.html").permitAll()
 //                .requestMatchers("/brand").hasRole("SALE") //this satic roles
@@ -37,9 +39,9 @@ public class SecurityConfig {
 //                .requestMatchers("/brand").hasRole(RoleEnum.SALE.name()) // allow to access all http method
 //                .requestMatchers(HttpMethod.POST, "/brand").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())// type safe
                 .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+                .authenticated();
+//                .and() this basic auth
+//                .httpBasic();
         return http.build();
     }
 
