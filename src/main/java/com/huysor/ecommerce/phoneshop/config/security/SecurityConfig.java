@@ -1,6 +1,7 @@
 package com.huysor.ecommerce.phoneshop.config.security;
 
 import com.huysor.ecommerce.phoneshop.config.jwt.JwtLoginFilter;
+import com.huysor.ecommerce.phoneshop.config.jwt.JwtVerify;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,18 +36,10 @@ public class SecurityConfig {
                  http
                 .csrf().disable()
                  .addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
-//
+                         .addFilterAfter(new JwtVerify(),JwtLoginFilter.class)
                 .authorizeHttpRequests()
                 .requestMatchers("/", "index.html").permitAll()
-//                .requestMatchers("/brand").hasRole("SALE") //this satic roles
-//                .requestMatchers(HttpMethod.GET,"/brand").hasAuthority("brand:read")// untype safe
-//                .requestMatchers(HttpMethod.GET, "/brand").hasAuthority(PermissionEnum.BRAND_READ.getDescription())
-//                .requestMatchers("/brand").hasRole(RoleEnum.SALE.name()) // allow to access all http method
-//                .requestMatchers(HttpMethod.POST, "/brand").hasAuthority(PermissionEnum.BRAND_WRITE.getDescription())// type safe
-                .anyRequest()
-                .authenticated();
-//                .and() this basic auth
-//                .httpBasic();
+                .anyRequest().authenticated();
         return http.build();
     }
     @Bean
@@ -70,8 +63,8 @@ public class SecurityConfig {
                 .password(passwordEncoder.encode("123"))
                 .authorities(RoleEnum.SALE.grantedAuthorities())
                 .build();
-
-        return new InMemoryUserDetailsManager(userDetails, userDetails1);
+      UserDetailsService userDetailsService= new  InMemoryUserDetailsManager(userDetails, userDetails1);
+        return userDetailsService ;
     }
 
 
