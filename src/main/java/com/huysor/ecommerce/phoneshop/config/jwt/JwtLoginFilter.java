@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -32,11 +31,10 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
 
-
             LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
             Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
-            authenticationManager.authenticate(authentication);
-            return authentication;
+            Authentication authenticated = authenticationManager.authenticate(authentication);
+            return authenticated;
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -46,20 +44,16 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        String serecretKey = "abdfdsjsdfkjjna;jksldfklasdfjklasdkljf";
+        String secretKey = "abdfdsjsdfkjjna;jksldfklasdfjklasdkljf";
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .setIssuedAt(new Date())
-                .claim("authorities", authResult.getAuthorities())
-                .setExpiration(
-                        Date.from(
-                                LocalDate.now()
-                                        .plusDays(7)
-                                        .atStartOfDay(ZoneId.systemDefault())
-                                        .toInstant()))
+                .claim("authorities",authResult.getAuthorities())
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(7)))
                 .setIssuer("phone.com")
-                .signWith(Keys.hmacShaKeyFor(serecretKey.getBytes()))
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                 .compact();
+
 
         response.setHeader("authorization", token);
     }

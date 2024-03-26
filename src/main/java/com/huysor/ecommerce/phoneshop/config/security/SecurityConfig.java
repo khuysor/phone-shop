@@ -5,7 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -21,16 +24,18 @@ import java.util.Collections;
 
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                  http
                 .csrf().disable()
-                         .addFilter(new JwtLoginFilter(authentication -> authentication))
+                 .addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
+//
                 .authorizeHttpRequests()
                 .requestMatchers("/", "index.html").permitAll()
 //                .requestMatchers("/brand").hasRole("SALE") //this satic roles
@@ -44,11 +49,18 @@ public class SecurityConfig {
 //                .httpBasic();
         return http.build();
     }
+    @Bean
+    AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+
+
 
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails userDetails = User
-                .withUsername("user")
+        UserDetails userDetails = User.builder().username("user")
                 .password(passwordEncoder.encode("123"))
 //                .roles("ADMIN") // static roles
                 .authorities(RoleEnum.ADMIN.grantedAuthorities()) // collection of granted  authorities
