@@ -10,19 +10,29 @@ import com.huysor.ecommerce.phoneshop.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("product")
+@Secured("ROLE_SALE")
 public class ProductController {
     private final ProductService productService;
     private final ProductMapper productMapper;
     private final ModelService modelService;
+
+    @GetMapping
+    public ResponseEntity<?>getAllProduct(){
+        List<Product>list= productService.getAllProduct();
+        return ResponseEntity.ok(list);
+
+    }
 
     @PostMapping
 

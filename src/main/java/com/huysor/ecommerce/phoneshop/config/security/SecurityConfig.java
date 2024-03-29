@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,22 +34,23 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                 http
+        http
                 .csrf().disable()
-                 .addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
-                         .addFilterAfter(new JwtVerify(),JwtLoginFilter.class)
+                .addFilter(new JwtLoginFilter(authenticationManager(authenticationConfiguration)))
+                .addFilterAfter(new JwtVerify(), JwtLoginFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/", "index.html").permitAll()
                 .anyRequest().authenticated();
         return http.build();
     }
+
     @Bean
     AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-
 
 
     @Bean
@@ -63,8 +65,8 @@ public class SecurityConfig {
                 .password(passwordEncoder.encode("123"))
                 .authorities(RoleEnum.SALE.grantedAuthorities())
                 .build();
-      UserDetailsService userDetailsService= new  InMemoryUserDetailsManager(userDetails, userDetails1);
-        return userDetailsService ;
+        UserDetailsService userDetailsService = new InMemoryUserDetailsManager(userDetails, userDetails1);
+        return userDetailsService;
     }
 
 
