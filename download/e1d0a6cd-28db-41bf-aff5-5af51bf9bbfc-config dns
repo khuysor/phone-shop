@@ -1,0 +1,80 @@
+yum install bind bind-utils
+systemctl start named
+nmtui
+    : then go to edit connection then 
+       pick eidt  and edit
+                                                                              ▒│ 
+                     │ ╤ IPv4 CONFIGURATION <Manual>                                 <Hide>   ▒│ 
+                     │ │          Addresses 192.168.1.254/24_________ <Remove>                ▒│ 
+                     │ │                    192.168.1.253/24_________ <Remove>                ▒│ 
+                     │ │                    <Add...>                                          ▒│ 
+                     │ │            Gateway 192.168.1.1______________                         ▒│ 
+                     │ │        DNS servers 192.168.1.254____________ <Remove>                ▒│ 
+                     │ │                    192.168.1.253____________ <Remove>  
+                and then save and quite
+nano /etc/sysconfig/network-scripts/ifcfg-ens160
+systemctl status
+nano /etc/named.conf
+    add  this up
+        zone "rupp.com" IN {
+                type master;
+                file "fwd.rupp.com";
+                allow-update{none;};
+        };
+        zone "1.168.192.in-addr.arpa" IN{
+                type master;
+                file "rev.rupp.com";
+                allow-update{none;};
+        };
+    include "/etc/named.rfc1912.zones";
+    include "/etc/named.root.key";
+
+
+    then save 
+cd /var/named 
+ll
+touch fwd.rupp.com
+nano fwd.rupp.com
+ and write this $TTL 1D
+            @       IN SOA server1.rupp.com. root.huysor.com.(
+                                                    0       ; serial
+                                                    1D      ; refresh
+                                                    1H      ; retry
+                                                    1W      ; expire
+                                                    3H)     ; minimum
+                    IN      NS      server1.rupp.com.
+                    IN      NS      server2.rupp.com.
+            server1 IN      A       192.168.1.254
+            server2 IN      A       192.168.1.253
+            www     IN      A       192.168.1.253
+        quite
+
+touch rev.rupp.com
+nano rev.rupp.com
+    and write this
+    $TTL 1D
+        @	IN SOA server1.rupp.com. root.huysor.com.(
+                                                0	; serial
+                                                1D	; refresh
+                                                1H	; retry
+                                                1W	; expire
+                                                3H)     ; minimum
+                IN	NS	server1.rupp.com.
+                IN	NS	server2.rupp.com.
+        server1 IN	A	192.168.1.254
+        server2 IN	A	192.168.1.253
+        www     IN	A	192.168.1.253
+        254     IN      PTR     server1.rupp.com.
+        253     IN      PTR     server2.rupp.com.
+    save and quite
+named-checkconf /etc/named.conf
+named-checkzone rupp.com /var/named/fwd.rupp.com
+named-checkzone rupp.com /var/named/rev.rupp.com
+firewall-cmd --permanent --add-port=53/udp
+firewall-cmd --reload
+firewall-cmd --list-all
+ ping 192.168.1.254
+
+ ping 192.168.1.253
+
+

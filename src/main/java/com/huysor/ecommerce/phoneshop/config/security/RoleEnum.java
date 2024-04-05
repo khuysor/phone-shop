@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum RoleEnum {
     ADMIN(Set.of(PermissionEnum.BRAND_WRITE, PermissionEnum.BRAND_READ, PermissionEnum.MODEL_WRITE, PermissionEnum.MODEL_READ)),
-    SALE(Set.of(PermissionEnum.BRAND_READ, PermissionEnum.MODEL_READ));
+    SALE(Set.of(PermissionEnum.BRAND_READ, PermissionEnum.MODEL_READ,PermissionEnum.BRAND_WRITE));
     private Set<PermissionEnum> permissionEnum;
 
     public Set<SimpleGrantedAuthority> grantedAuthorities() {
