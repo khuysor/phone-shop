@@ -1,32 +1,34 @@
 package com.huysor.ecommerce.phoneshop.controller;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.huysor.ecommerce.phoneshop.Mapper.ModelEntityMapper;
 import com.huysor.ecommerce.phoneshop.dto.ModelDTO;
 import com.huysor.ecommerce.phoneshop.dto.PageDTO;
+import com.huysor.ecommerce.phoneshop.entity.AttachmentFile;
 import com.huysor.ecommerce.phoneshop.entity.Model;
+import com.huysor.ecommerce.phoneshop.services.AttachmentService;
 import com.huysor.ecommerce.phoneshop.services.ModelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.tika.Tika;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.huysor.ecommerce.phoneshop.Mapper.BrandMapper;
 import com.huysor.ecommerce.phoneshop.dto.BrandDTO;
 import com.huysor.ecommerce.phoneshop.entity.Brands;
 import com.huysor.ecommerce.phoneshop.services.BrandService;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,6 +38,8 @@ public class BrandController {
 	private final BrandService brandService;
 	private final ModelService modelService;
 	private final ModelEntityMapper modelEntityMapper;
+	private final AttachmentService attachmentService;
+
 
 	@PreAuthorize("hasAuthority('brand:write')") //or like this
 	@RequestMapping(method = RequestMethod.POST)
@@ -71,6 +75,32 @@ public class BrandController {
 		List<Model> brands= modelService.getModelByBrandId(brandId);
 		List<ModelDTO> model=brands.stream().map(modelEntityMapper::toModelDTO).toList();
 		return ResponseEntity.ok(model);
+	}
+	@PostMapping("upload")
+	public ResponseEntity<?>uploadFile(@RequestParam("file")MultipartFile file) throws Exception {
+		AttachmentFile attachmentFile=null;
+		String downLoadUrl="";
+		attachmentFile=attachmentService.upload(file);
+		downLoadUrl= ServletUriComponentsBuilder
+				.fromCurrentContextPath()
+				.path("/brand/upload/"+String.valueOf(attachmentFile.getId()))
+				.toUriString();
+		List list= List.of(attachmentFile, downLoadUrl);
+		return ResponseEntity.ok(list);
+	}
+	@GetMapping("upload/{name}")
+	public ResponseEntity<?>getFileUpload(@PathVariable("name")String fileName) throws Exception {
+		AttachmentFile file= attachmentService.getFileUpload(fileName);
+		ResponseEntity<ByteArrayResource> body = ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType(file.getType()))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=\"" + file.getName() + "\"")
+				.body(new ByteArrayResource(file.getFileData()));
+		return body;
+	}
+	@PostMapping("uploads")
+	public ResponseEntity<?>multiUpload(@RequestParam("file")List<MultipartFile> file) throws Exception {
+
+		return ResponseEntity.ok(null);
 	}
 
 }
