@@ -97,6 +97,10 @@ public class BrandController {
 				.body(new ByteArrayResource(file.getFileData()));
 		return body;
 	}
+	@PostMapping("uploads")
+	public ResponseEntity<?>multiUpload(@RequestParam("file")List<MultipartFile> file) throws Exception {
 
+		return ResponseEntity.ok(null);
+	}
 
 }

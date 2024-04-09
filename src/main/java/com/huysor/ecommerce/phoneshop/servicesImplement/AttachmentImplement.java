@@ -12,6 +12,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -54,5 +55,10 @@ public class AttachmentImplement implements AttachmentService {
     @Override
     public AttachmentFile getFileUpload(String name) throws Exception {
         return attachmentRepository.findByName(name).orElseThrow(()->new Exception("File not found with file name"+name));
+    }
+
+    @Override
+    public Map<AttachmentFile, Long> multiUpload(MultipartFile file) {
+        return null;
     }
 }
