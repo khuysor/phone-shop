@@ -32,6 +32,11 @@ public class ProductImplement implements ProductService {
     private final ProductMapper productMapper;
 
     @Override
+    public List<Product> getAllProduct() {
+        return productRepository.findAll();
+    }
+
+    @Override
     public Product getProduct(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product", id));
     }
