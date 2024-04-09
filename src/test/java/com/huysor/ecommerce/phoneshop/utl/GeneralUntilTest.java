@@ -2,6 +2,7 @@ package com.huysor.ecommerce.phoneshop.utl;
 
 import com.huysor.ecommerce.phoneshop.services.util.GeneralUntils;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
@@ -24,5 +25,11 @@ public class GeneralUntilTest {
         // it we error when write
 //        assertEquals(7,list.get(1)); cause the result actual is 8
 
+    }
+    @Test
+    public void showPassword(){
+        BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+        String enCode=passwordEncoder.encode("123");
+        System.out.println(enCode);
     }
 }

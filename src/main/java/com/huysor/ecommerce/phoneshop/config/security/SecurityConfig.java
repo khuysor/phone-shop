@@ -2,11 +2,14 @@ package com.huysor.ecommerce.phoneshop.config.security;
 
 import com.huysor.ecommerce.phoneshop.config.jwt.JwtLoginFilter;
 import com.huysor.ecommerce.phoneshop.config.jwt.JwtVerify;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -26,11 +29,12 @@ import java.util.Collections;
 
 
 @Configuration
+@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
-    @Autowired
     private PasswordEncoder passwordEncoder;
     private AuthenticationConfiguration authenticationConfiguration;
+    private UserDetailsService userDetailsService;
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -52,22 +56,33 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.builder().username("user")
-                .password(passwordEncoder.encode("123"))
-//                .roles("ADMIN") // static roles
-                .authorities(RoleEnum.ADMIN.grantedAuthorities()) // collection of granted  authorities
-                .build();
-        UserDetails userDetails1 = User
-                .withUsername("kok")
-                .password(passwordEncoder.encode("123"))
-                .authorities(RoleEnum.SALE.grantedAuthorities())
-                .build();
-        UserDetailsService userDetailsService = new InMemoryUserDetailsManager(userDetails, userDetails1);
-        return userDetailsService;
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(getAuthenticationProvider());
     }
+
+    public AuthenticationProvider getAuthenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        return authenticationProvider;
+    }
+
+
+//    @Bean
+//    protected UserDetailsService userDetailsService() {
+//        UserDetails userDetails = User.builder().username("user")
+//                .password(passwordEncoder.encode("123"))
+////                .roles("ADMIN") // static roles
+//                .authorities(RoleEnum.ADMIN.grantedAuthorities()) // collection of granted  authorities
+//                .build();
+//        UserDetails userDetails1 = User
+//                .withUsername("kok")
+//                .password(passwordEncoder.encode("123"))
+//                .authorities(RoleEnum.SALE.grantedAuthorities())
+//                .build();
+//        UserDetailsService userDetailsService = new InMemoryUserDetailsManager(userDetails, userDetails1);
+//        return userDetailsService;
+//    }
 
 
 }
