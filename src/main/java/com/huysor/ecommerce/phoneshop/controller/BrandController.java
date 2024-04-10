@@ -1,4 +1,5 @@
 package com.huysor.ecommerce.phoneshop.controller;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,74 +34,80 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("brand")
-@Secured("ROLE_SALE")// we can use like this
+//@Secured("ROLE_SALE")// we can use like this
 public class BrandController {
-	private final BrandService brandService;
-	private final ModelService modelService;
-	private final ModelEntityMapper modelEntityMapper;
-	private final AttachmentService attachmentService;
+    private final BrandService brandService;
+    private final ModelService modelService;
+    private final ModelEntityMapper modelEntityMapper;
+    private final AttachmentService attachmentService;
 
 
-	@PreAuthorize("hasAuthority('brand:write')") //or like this
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
-		Brands brands = BrandMapper.INSTANCE.toBrand(brandDTO);
-		brands = brandService.create(brands);
-		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brands));
-	}
-	@PreAuthorize("hasAuthority('brand:read')")
-	@GetMapping("{id}")
-	public ResponseEntity<?> getOneBrand(@PathVariable("id") Long brand_id) {
-		Brands brands = brandService.getBrandById(brand_id);
-		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brands));
-	}
+    @PreAuthorize("hasAuthority('brand:write')") //or like this
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> create(@RequestBody BrandDTO brandDTO) {
+        Brands brands = BrandMapper.INSTANCE.toBrand(brandDTO);
+        brands = brandService.create(brands);
+        return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brands));
+    }
 
-	@PutMapping("{id}")
-	public ResponseEntity<?> updateBrand(@PathVariable("id") Long brand_id, @RequestBody BrandDTO brandDTO) {
-		Brands brands = BrandMapper.INSTANCE.toBrand(brandDTO);
-		Brands updated = brandService.update(brand_id, brands);
-		return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updated));
-	}
+    @PreAuthorize("hasAuthority('brand:read')")
+    @GetMapping("{id}")
+    public ResponseEntity<?> getOneBrand(@PathVariable("id") Long brand_id) {
+        Brands brands = brandService.getBrandById(brand_id);
+        return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(brands));
+    }
+
+    @PreAuthorize("hasAnyAuthority('brand:read')")
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateBrand(@PathVariable("id") Long brand_id, @RequestBody BrandDTO brandDTO) {
+        Brands brands = BrandMapper.INSTANCE.toBrand(brandDTO);
+        Brands updated = brandService.update(brand_id, brands);
+        return ResponseEntity.ok(BrandMapper.INSTANCE.toBrandDTO(updated));
+    }
 
 
-	@GetMapping
-	public ResponseEntity<?> getbrands(@RequestParam Map<String, String> params) {
-		Page<Brands> brand=brandService.getBrands(params);
-		PageDTO pageDTO=new PageDTO(brand);
-		return ResponseEntity.ok(pageDTO);
-	}
-	@GetMapping("{id}/models")
-	public  ResponseEntity<?>getModelByBrandID(@PathVariable("id")Long brandId){
+    @GetMapping
+    public ResponseEntity<?> getbrands(@RequestParam Map<String, String> params) {
+        Page<Brands> brand = brandService.getBrands(params);
+        PageDTO pageDTO = new PageDTO(brand);
+        return ResponseEntity.ok(pageDTO);
+    }
 
-		List<Model> brands= modelService.getModelByBrandId(brandId);
-		List<ModelDTO> model=brands.stream().map(modelEntityMapper::toModelDTO).toList();
-		return ResponseEntity.ok(model);
-	}
-	@PostMapping("upload")
-	public ResponseEntity<?>uploadFile(@RequestParam("file")MultipartFile file) throws Exception {
-		AttachmentFile attachmentFile=null;
-		String downLoadUrl="";
-		attachmentFile=attachmentService.upload(file);
-		downLoadUrl= ServletUriComponentsBuilder
-				.fromCurrentContextPath()
-				.path("/brand/upload/"+String.valueOf(attachmentFile.getId()))
-				.toUriString();
-		List list= List.of(attachmentFile, downLoadUrl);
-		return ResponseEntity.ok(list);
-	}
-	@GetMapping("upload/{name}")
-	public ResponseEntity<?>getFileUpload(@PathVariable("name")String fileName) throws Exception {
-		AttachmentFile file= attachmentService.getFileUpload(fileName);
-		ResponseEntity<ByteArrayResource> body = ResponseEntity.ok()
-				.contentType(MediaType.parseMediaType(file.getType()))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=\"" + file.getName() + "\"")
-				.body(new ByteArrayResource(file.getFileData()));
-		return body;
-	}
-	@PostMapping("uploads")
-	public ResponseEntity<?>multiUpload(@RequestParam("file")List<MultipartFile> file) throws Exception {
+    @GetMapping("{id}/models")
+    public ResponseEntity<?> getModelByBrandID(@PathVariable("id") Long brandId) {
 
-		return ResponseEntity.ok(null);
-	}
+        List<Model> brands = modelService.getModelByBrandId(brandId);
+        List<ModelDTO> model = brands.stream().map(modelEntityMapper::toModelDTO).toList();
+        return ResponseEntity.ok(model);
+    }
+
+    @PostMapping("upload")
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+        AttachmentFile attachmentFile = null;
+        String downLoadUrl = "";
+        attachmentFile = attachmentService.upload(file);
+        downLoadUrl = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/brand/upload/" + String.valueOf(attachmentFile.getId()))
+                .toUriString();
+        List list = List.of(attachmentFile, downLoadUrl);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("upload/{name}")
+    public ResponseEntity<?> getFileUpload(@PathVariable("name") String fileName) throws Exception {
+        AttachmentFile file = attachmentService.getFileUpload(fileName);
+        ResponseEntity<ByteArrayResource> body = ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(file.getType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=\"" + file.getName() + "\"")
+                .body(new ByteArrayResource(file.getFileData()));
+        return body;
+    }
+
+    @PostMapping("uploads")
+    public ResponseEntity<?> multiUpload(@RequestParam("file") List<MultipartFile> file) throws Exception {
+
+        return ResponseEntity.ok(null);
+    }
 
 }
